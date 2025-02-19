@@ -11,6 +11,7 @@ git clone https://github.com/nhatzonz/happy_shoppper.git
 cd happy_shopper
 
 ### ** 2.Cài đặt dependencies**
+đảm bảo đã cài Node.js
 ```sh
 npm install
 
