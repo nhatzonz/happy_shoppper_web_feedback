@@ -4,13 +4,13 @@ Happy Shopper đây là Website khi khách hàng quét QR sẽ qua url đến. N
 
 ## ⚙️ Cách cài đặt và chạy dự án
 
-### **1️⃣ Clone repository về máy**
+### ** 1.Clone repository về máy**
 Mở terminal hoặc command prompt và chạy lệnh:  
 ```sh
 git clone https://github.com/nhatzonz/happy_shoppper.git
 cd happy_shopper
 
-### **2️⃣ Cài đặt dependencies**
+### ** 2.Cài đặt dependencies**
 ```sh
 npm install
 
