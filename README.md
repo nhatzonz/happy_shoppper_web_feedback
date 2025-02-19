@@ -9,6 +9,7 @@ Mở terminal hoặc command prompt và chạy lệnh:
 ```sh
 git clone https://github.com/nhatzonz/happy_shoppper.git
 cd happy_shopper
+
 ### **2️⃣ Cài đặt dependencies**
 ```sh
 npm install
