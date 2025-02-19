@@ -1,0 +1,42 @@
+.wrapper-btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    & + .wrapper-btn {
+        margin-left: 10px;
+    }
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 2.2rem;
+    text-align: center;
+}
+
+.outline {
+    border: 1px solid #269755;
+    color: #65b281;
+    &:hover {
+        background-color: #ebebeb;
+    }
+}
+
+.primary {
+    background-color: #269755;
+    border: 1px solid transparent;
+    color: #fff;
+
+    &:hover {
+        background-color: #2f7e50;
+    }
+}
+
+.large {
+    width: 100%;
+    height: auto;
+}
+.small {
+    width: 20%;
+}
