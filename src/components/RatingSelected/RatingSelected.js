@@ -5,11 +5,12 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Button from '../Button/Button';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import thanksimg from '../../assets/images/thanks_submit.png';
+import sorryimg from '../../assets/images/image_sorry.png';
 import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
-function RatingSelected({ data, onNext, onBack, current, title, finish, rating, setRating }) {
+function RatingSelected({ data, onNext, onBack, current, title, finish, rating, setRating, sorry }) {
     const [hover, setHover] = useState(0);
     const [feedback, setFeedback] = useState('');
     const [isMobile, setIsMobile] = useState(false);
@@ -103,7 +104,7 @@ function RatingSelected({ data, onNext, onBack, current, title, finish, rating, 
                         ))
                     )}
                 </div>
-                {finish && <img src={thanksimg} className={cx('img-thanks')} alt="xin cam on" />}
+                {finish && <img src={sorry ? sorryimg : thanksimg} className={cx('img-thanks')} alt="xin cam on" />}
             </div>
         </div>
     );

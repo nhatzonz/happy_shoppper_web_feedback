@@ -1,31 +1,20 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../Header/Header';
 import RatingSelected from '../RatingSelected/RatingSelected';
 import styles from './Layout.module.scss';
 import classNames from 'classnames/bind';
-
 import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
-// Lấy dữ liệu từ URL
 const urlParams = new URLSearchParams(window.location.search);
-const nameClient = urlParams.get('customerName') || 'Khách hàng';
-const serviceID = urlParams.get('serviceID') || 'Dịch vụ';
-const nameService = urlParams.get('serviceName') || 'Dịch vụ';
-const staffcode = urlParams.get('staffCode') || 'Nhân viên';
-const nameStaff = urlParams.get('staffName') || 'Khách hàng';
-console.log(serviceID, staffcode);
+const billId = urlParams.get('billId');
+console.log('xxx:', billId);
 
-// Tạo DATA mới
+const BACKEND_API = 'http://localhost:5000';
+
 const DATA = [
     {
-        nameService,
-        nameStaff,
-        nameClient,
-        serviceID,
-        staffcode,
         spaceService: 'Không gian phục vụ',
         feedbackService: 'Góp ý chúng tôi',
         thanks: 'Cảm ơn bạn đã đánh giá dịch vụ !',
@@ -42,6 +31,7 @@ function Layout() {
     const [current, setCurrent] = useState(1);
     const [rating, setRating] = useState(5);
     const [subFeedback, setsubFeedback] = useState('');
+    const [sorry, setSorry] = useState(true);
 
     function handleNext() {
         if (current === 1) {
@@ -55,28 +45,22 @@ function Layout() {
         setRating(5);
     }
 
-    function handleSubmit(value) {
+    async function handleSubmit(value) {
         let store = {
-            service_id: serviceID,
-            staff_code: staffcode,
-            customer_name: nameClient,
-            rating_service: rating_service,
-            rating_space: rating_space,
+            billId: Number(billId),
+            serviceRating: rating_service,
+            spaceRating: rating_space,
             comment: value || subFeedback,
         };
-
-        console.log('Data to submit:', store);
-
-        axios
-            .post('http://ichi.io.vn/api/feedback', store)
-            .then((response) => {
-                console.log('Feedback submitted:', response.data);
-                setCurrent(current + 1);
-            })
-            .catch((error) => {
-                console.error('Error submitting feedback:', error.response?.data || error.message);
-                alert('Gửi đánh giá thất bại. Vui lòng thử lại!');
-            });
+        console.log('store:', store);
+        handleSorry();
+        setCurrent(current + 1);
+        try {
+            await axios.post(`${BACKEND_API}/feedbacks/create`, store);
+            setCurrent(current + 1);
+        } catch (error) {
+            alert('Gửi đánh giá thất bại. Vui lòng thử lại!');
+        }
     }
 
     function handleBack(value) {
@@ -88,7 +72,21 @@ function Layout() {
         }
         setCurrent(current - 1);
     }
-
+    function handleSorry() {
+        if (rating_service >= 4 && rating_space >= 4) {
+            setSorry(false);
+        } else {
+            setSorry(true);
+        }
+    }
+    const titleFinish =
+        rating_service >= 4 && rating_space >= 4 ? (
+            'Cảm ơn bạn đã đánh giá dịch vụ!'
+        ) : (
+            <>
+                Thành thật xin lỗi quý khách <br /> về trải nghiệm chưa hoàn hảo !
+            </>
+        );
     return (
         <div className={cx('wrapper')}>
             <Header contact="19001006" />
@@ -122,11 +120,12 @@ function Layout() {
                 )}
                 {current === 4 && (
                     <RatingSelected
-                        title="Cảm ơn bạn đã đánh giá dịch vụ !"
+                        title={titleFinish}
                         current={current}
                         finish={true}
                         rating={rating}
                         setRating={setRating}
+                        sorry={sorry}
                     />
                 )}
             </div>
