@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import RatingSelected from '../RatingSelected/RatingSelected';
 import styles from './Layout.module.scss';
@@ -9,9 +9,10 @@ const cx = classNames.bind(styles);
 
 const urlParams = new URLSearchParams(window.location.search);
 const billId = urlParams.get('billId');
-console.log('xxx:', billId);
+const shopId = urlParams.get('shopId');
 
-const BACKEND_API = 'http://localhost:5000';
+const BACKEND_API = 'https://sotiem.vn';
+// const BACKEND_API = 'http://localhost:5000';
 
 const DATA = [
     {
@@ -32,6 +33,21 @@ function Layout() {
     const [rating, setRating] = useState(5);
     const [subFeedback, setsubFeedback] = useState('');
     const [sorry, setSorry] = useState(true);
+    const [phone, setPhone] = useState('');
+    useEffect(() => {
+        if (shopId) {
+            const fetchPhone = async () => {
+                try {
+                    const res = await axios.get(`${BACKEND_API}/shops/phone/${shopId}`);
+
+                    setPhone(res.data.phonecskh);
+                } catch (error) {
+                    console.error('Error fetching phone:', error);
+                }
+            };
+            fetchPhone();
+        }
+    }, []);
 
     function handleNext() {
         if (current === 1) {
@@ -48,11 +64,11 @@ function Layout() {
     async function handleSubmit(value) {
         let store = {
             billId: Number(billId),
+            shopId: Number(shopId),
             serviceRating: rating_service,
             spaceRating: rating_space,
             comment: value || subFeedback,
         };
-        console.log('store:', store);
         handleSorry();
         setCurrent(current + 1);
         try {
@@ -89,7 +105,7 @@ function Layout() {
         );
     return (
         <div className={cx('wrapper')}>
-            <Header contact="19001006" />
+            <Header contact={phone || '19001008'} />
             <div className={cx('container')}>
                 {current === 1 && (
                     <RatingSelected
@@ -98,6 +114,7 @@ function Layout() {
                         current={current}
                         rating={rating}
                         setRating={setRating}
+                        title="Đánh giá nhân viên"
                     />
                 )}
                 {current === 2 && (
